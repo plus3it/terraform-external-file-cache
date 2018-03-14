@@ -33,8 +33,12 @@ jobs:
         - TESTCOMMAND="terraform fmt -check=true"
     - stage: test
       env:
-        - JOB="Terraform Validation Check"
-        - TESTCOMMAND="terraform init examples/example1 && terraform validate examples/example1"
+        - JOB="Terraform S3 Validation Check"
+        - TESTCOMMAND="terraform init examples/s3 && terraform validate examples/s3"
+    - stage: test
+      env:
+        - JOB="Terraform EC2 Validation Check"
+        - TESTCOMMAND="terraform init examples/ec2 && terraform validate example/ec2"
     - stage: deploy
       if: env(PRIOR_VERSION) IS present AND env(PRIOR_VERSION) != env(RELEASE_VERSION) AND branch = master AND type = push AND repo = plus3it/terraform-external-file-cache
       env:
