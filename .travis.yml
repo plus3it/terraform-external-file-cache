@@ -1,0 +1,54 @@
+language: bash
+
+sudo: false
+
+env:
+  global:
+    - AWS_DEFAULT_REGION="us-east-1"
+
+before_install:
+  - TERRAFORM_VERSION=$(curl -sSL https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')
+  - TERRAFORM_URL="https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+  - echo "TERRAFORM_URL=${TERRAFORM_URL}"
+  - curl -sSL -o terraform.zip "$TERRAFORM_URL"
+  - unzip terraform.zip && rm -f terraform.zip
+  - chmod +x terraform
+  - mkdir -p $HOME/bin
+  - export PATH=$PATH:$HOME/bin
+  - mv terraform $HOME/bin
+  - terraform --version
+
+before_script:
+  - echo $JOB
+  - echo $TESTCOMMAND
+
+script:
+  - bash -c "$TESTCOMMAND"
+
+jobs:
+  include:
+    - stage: test
+      env:
+        - JOB="Terraform Format Check"
+        - TESTCOMMAND="terraform fmt -check=true"
+    - stage: test
+      env:
+        - JOB="Terraform Validation Check"
+        - TESTCOMMAND="terraform init examples/example1 && terraform validate examples/example1"
+    - stage: deploy
+      if: env(PRIOR_VERSION) IS present AND env(PRIOR_VERSION) != env(RELEASE_VERSION) AND branch = master AND type = push AND repo = plus3it/terraform-external-file-cache
+      env:
+        - PRIOR_VERSION=$(git describe --abbrev=0 --tags)
+        - RELEASE_VERSION=$(grep current_version $TRAVIS_BUILD_DIR/.bumpversion.cfg | sed 's/^.*= //')
+        - RELEASE_BODY="* [terraform-external-file-cache v$RELEASE_VERSION changes](https://github.com/plus3it/terraform-external-file-cache/compare/$PRIOR_VERSION...$RELEASE_VERSION)"
+      script: skip
+      before_deploy:
+        - echo PRIOR_VERSION=$PRIOR_VERSION
+        - echo RELEASE_VERSION=$RELEASE_VERSION
+        - echo RELEASE_BODY=$RELEASE_BODY
+      deploy:
+        provider: releases
+        name: $RELEASE_VERSION
+        tag_name: $RELEASE_VERSION
+        body: $RELEASE_BODY
+        draft: false
