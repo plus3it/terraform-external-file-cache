@@ -3,7 +3,7 @@ locals {
     "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" = "/tmp/"
   }
 
-  uris = "${keys(local.uri_map)}"
+  uris  = "${keys(local.uri_map)}"
   paths = "${values(local.uri_map)}"
 }
 
@@ -44,8 +44,8 @@ resource "tls_private_key" "example" {
 }
 
 resource "aws_key_pair" "example" {
-  key_name_prefix   = "terraform-external-file-cache-"
-  public_key        = "${tls_private_key.example.public_key_openssh}"
+  key_name_prefix = "terraform-external-file-cache-"
+  public_key      = "${tls_private_key.example.public_key_openssh}"
 }
 
 resource "aws_security_group" "example" {
