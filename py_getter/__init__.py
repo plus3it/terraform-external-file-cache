@@ -23,6 +23,22 @@ def basename_from_uri(uri):
     return os.path.basename(parse.urlparse(uri).path)
 
 
+def qualify_uri(uri):
+    """Return a URI compatible with urllib, handling relative file:// URIs."""
+    parts = parse.urlparse(uri)
+    scheme = parts.scheme
+
+    if scheme != 'file':
+        # Return non-file paths unchanged
+        return uri
+
+    # Expand relative file paths and convert them to uri-style
+    path = request.pathname2url(os.path.abspath(os.path.expanduser(
+        ''.join([x for x in [parts.netloc, parts.path] if x]))))
+
+    return parse.urlunparse((scheme, '', path, '', '', ''))
+
+
 def qualify_path(path):
     """Qualify the destination path."""
     return os.path.abspath(os.path.expanduser(path))
@@ -56,7 +72,7 @@ def main(uri, path, refresh=False):
     qualified_dest = os.path.join(qualified_path, filename)
     create_path(qualified_path)
     if not os.path.isfile(qualified_dest) or refresh:
-        getter(uri, qualified_dest)
+        getter(qualify_uri(uri), qualified_dest)
     return {"filepath": qualified_dest}
 
 
