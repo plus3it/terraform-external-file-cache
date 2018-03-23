@@ -1,7 +1,7 @@
 data "external" "this" {
   count = "${length(var.uris)}"
 
-  program = ["python", "${path.module}/py_getter", "--json", "-"]
+  program = ["python", "${path.module}/file_cache.py"]
 
   query = {
     uri     = "${element(var.uris, count.index)}"

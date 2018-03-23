@@ -5,7 +5,6 @@ from __future__ import (absolute_import, division, print_function,
 
 import argparse
 import io
-import json
 import os
 import shutil
 import sys
@@ -77,7 +76,7 @@ def main(uri, path, refresh=False):
         qualified_path, qualify_filename(basename_from_uri(uri))
     )
     create_path(qualified_path)
-    if not os.path.isfile(qualified_dest) or refresh:
+    if not os.path.isfile(qualified_dest) or to_bool(refresh):
         getter(qualify_uri(uri), qualified_dest)
     return {"filepath": qualified_dest}
 
@@ -85,25 +84,10 @@ def main(uri, path, refresh=False):
 def cli():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(prog="py-getter")
-    parser.add_argument(
-        "--json", required=False, type=argparse.FileType("r"),
-        help="Parses URI and PATH from a json document"
-    )
-    parser.add_argument("uri", nargs="?")
-    parser.add_argument("path", nargs="?")
+    parser.add_argument("URI")
+    parser.add_argument("PATH")
     parser.add_argument("--refresh", action="store_true")
 
     args = parser.parse_args()
 
-    if args.json:
-        if args.uri or args.path:
-            parser.error('Do not pass URI or PATH when using --json')
-        with args.json as fp_:
-            json_args = json.load(fp_)
-            args.uri = json_args['uri']
-            args.path = json_args['path']
-            args.refresh = to_bool(json_args.get('refresh', args.refresh))
-    elif not (args.uri and args.path):
-        parser.error('Expected two positional arguments, URI and PATH')
-
-    sys.exit(print(json.dumps(main(args.uri, args.path, args.refresh))))
+    sys.exit(main(args.URI, args.PATH, args.refresh))

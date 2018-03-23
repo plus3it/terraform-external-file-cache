@@ -11,17 +11,8 @@ Why does this file exist, and why __main__? For more info, read:
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals, with_statement)
 
-import os
-import sys
-
-
-parent_dir = os.path.abspath(
-    os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
-
-if parent_dir not in sys.path:
-    sys.path = [parent_dir] + sys.path
-
 from py_getter import cli
+
 
 if __name__ == "__main__":
     cli()
