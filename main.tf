@@ -5,7 +5,7 @@ data "external" "this" {
 
   query = {
     uri     = "${element(var.uris, count.index)}"
-    path    = "${path.module}/.cache/${sha256(element(var.uris, count.index))}"
+    path    = "${var.cache_dir}/${sha256(element(var.uris, count.index))}"
     refresh = "${var.refresh}"
   }
 }
