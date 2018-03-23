@@ -44,6 +44,11 @@ def qualify_path(path):
     return os.path.abspath(os.path.expanduser(path))
 
 
+def qualify_filename(filename):
+    """Qualify the destination filename."""
+    return parse.unquote(filename)
+
+
 def create_path(path):
     """Create the destination directory."""
     try:
@@ -67,9 +72,10 @@ def getter(uri, dest):
 
 def main(uri, path, refresh=False):
     """Coordinate the retrieval of a file from a URI."""
-    filename = basename_from_uri(uri)
     qualified_path = qualify_path(path)
-    qualified_dest = os.path.join(qualified_path, filename)
+    qualified_dest = os.path.join(
+        qualified_path, qualify_filename(basename_from_uri(uri))
+    )
     create_path(qualified_path)
     if not os.path.isfile(qualified_dest) or refresh:
         getter(qualify_uri(uri), qualified_dest)
