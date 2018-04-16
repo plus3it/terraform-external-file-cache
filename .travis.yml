@@ -5,6 +5,9 @@ sudo: false
 env:
   global:
     - AWS_DEFAULT_REGION="us-east-1"
+    - REPO="${TRAVIS_REPO_SLUG#*/}"
+    - OWNER=plus3it
+    - DEPLOY_SLUG=$OWNER/$REPO
 
 before_install:
   - TERRAFORM_VERSION=$(curl -sSL https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')
@@ -40,11 +43,12 @@ jobs:
         - JOB="Terraform EC2 Validation Check"
         - TESTCOMMAND="terraform init examples/ec2 && terraform validate examples/ec2"
     - stage: deploy
-      if: branch = master AND type = push AND repo = plus3it/terraform-external-file-cache
+      if: branch = master AND type = push AND repo = env(DEPLOY_SLUG)
       env:
+        - JOB="Deploy to GitHub Releases"
         - PRIOR_VERSION=$(git describe --abbrev=0 --tags)
         - RELEASE_VERSION=$(grep current_version $TRAVIS_BUILD_DIR/.bumpversion.cfg | sed 's/^.*= //')
-        - RELEASE_BODY="* [terraform-external-file-cache v$RELEASE_VERSION changes](https://github.com/plus3it/terraform-external-file-cache/compare/$PRIOR_VERSION...$RELEASE_VERSION)"
+        - RELEASE_BODY="* [$REPO v$RELEASE_VERSION changes](https://github.com/$OWNER/$REPO/compare/$PRIOR_VERSION...$RELEASE_VERSION)"
       before_script:
         - echo PRIOR_VERSION=$PRIOR_VERSION
         - echo RELEASE_VERSION=$RELEASE_VERSION
