@@ -40,7 +40,7 @@ jobs:
         - JOB="Terraform EC2 Validation Check"
         - TESTCOMMAND="terraform init examples/ec2 && terraform validate examples/ec2"
     - stage: deploy
-      if: branch = master AND type = push AND repo = plus3it/terraform-aws-watchmaker
+      if: branch = master AND type = push AND repo = plus3it/terraform-external-file-cache
       env:
         - PRIOR_VERSION=$(git describe --abbrev=0 --tags)
         - RELEASE_VERSION=$(grep current_version $TRAVIS_BUILD_DIR/.bumpversion.cfg | sed 's/^.*= //')
@@ -50,7 +50,7 @@ jobs:
         - echo RELEASE_VERSION=$RELEASE_VERSION
         - echo RELEASE_BODY=$RELEASE_BODY
       script:
-        - test "$PRIOR_VERSION" = "$RELEASE_VERSION" && travis_terminate
+        - test "$PRIOR_VERSION" = "$RELEASE_VERSION" && travis_terminate || echo "Deploying new version..."
       deploy:
         provider: releases
         name: $RELEASE_VERSION
