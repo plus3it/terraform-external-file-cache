@@ -3,6 +3,9 @@
 *.tfstate.backup
 .terraform/
 
+# Module-specific exclusions
+.filecache
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
