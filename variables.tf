@@ -15,3 +15,9 @@ variable "refresh" {
   description = "Retrieve file even if the URI is already cached on the system"
   default     = "false"
 }
+
+variable "python_cmd" {
+  type        = "list"
+  description = "Command to use when executing the python external resource"
+  default     = ["python"]
+}
