@@ -7,7 +7,7 @@ env:
     - AWS_DEFAULT_REGION="us-east-1"
     - REPO="${TRAVIS_REPO_SLUG#*/}"
     - OWNER=plus3it
-    - DEPLOY_SLUG=$OWNER/$REPO
+    - RELEASE_BRANCH=master
 
 before_install:
   - TERRAFORM_VERSION=$(curl -sSL https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')
@@ -43,7 +43,7 @@ jobs:
         - JOB="Terraform EC2 Validation Check"
         - TESTCOMMAND="terraform init examples/ec2 && terraform validate examples/ec2"
     - stage: deploy
-      if: branch = master AND type = push AND repo = env(DEPLOY_SLUG)
+      if: branch = env(RELEASE_BRANCH) AND tag IS blank
       env:
         - JOB="Deploy to GitHub Releases"
         - PRIOR_VERSION=$(git describe --abbrev=0 --tags)
@@ -54,7 +54,7 @@ jobs:
         - echo RELEASE_VERSION=$RELEASE_VERSION
         - echo RELEASE_BODY=$RELEASE_BODY
       script:
-        - test "$PRIOR_VERSION" = "$RELEASE_VERSION" && travis_terminate || echo "Deploying new version..."
+        - test "$PRIOR_VERSION" = "$RELEASE_VERSION" && (echo "Version has not changed" && travis_terminate) || echo "Will deploy new version $RELEASE_VERSION..."
       deploy:
         provider: releases
         name: $RELEASE_VERSION
@@ -63,3 +63,5 @@ jobs:
         draft: false
         api_key:
           secure: C8Mo8pyW/pA50TXGM+49xyZtlkjsGsifZDYt8Hn+2sU4WsciuXgfFisuTDnCGnW2JNvqmWSh2QUzZ2X+f8sarO/cDtBTQ9AwDU+8WwQM4zzdVJekDZsnO29yvs3FPTTHOUb/DfaB0kBi572bgbzA8zQOwHtLzhNAh6lkgMQ+SiGxQRqjUkvcX69Hgx+zDooudfhkTk28Fs4twgz8yaN7WGb9vELUn5353uuJShbzjW0vHMAQXJEIOPgkmOW4was5jAV96vCazn/lVBPPzCwvHMFeqw5v9KHwnsLUrLbJSgoJGxy1zwevvH2zbkvXAcrvON/6CUzoido29pFV0GG/cglmWwVB6d9kHgGQxeZcr6qPyoWnbt2rJBnxXnyupVNa8g1TPV+6gdkSdnUZ1G9taG+Q2d33Jo2ba+2+AB36cb8OBnjEIESjc5/X5ejKP2Eb16oAucUvz1IUH0wKePMJ6qToFLJlEOO0u9akd2IAIk9xxMI9WFB5gDrV5i0P5T9lQuhcdR4tjwzzFPt0voEcEkDVSuCj0PK5N0AJujkwlSiNxJ5I6T56/avJ2fK/ralt7opDqTgdxZ2xMOubU8bOLYfG/LhRAmMHNpLJqRhQa5nRe4MIEHIaVADd21kU7UdQW8pQhWKhZhdNkPy0CR+zBwSnPDUgMTn7Wurg87+tnS4=
+        on:
+          branch: $RELEASE_BRANCH
