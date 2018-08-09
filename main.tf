@@ -1,7 +1,7 @@
 data "external" "this" {
   count = "${length(var.uris)}"
 
-  program = ["python", "${path.module}/file_cache.py"]
+  program = "${concat(var.python_cmd, list("${path.module}/file_cache.py"))}"
 
   query = {
     uri     = "${element(var.uris, count.index)}"

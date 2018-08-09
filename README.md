@@ -6,6 +6,10 @@ Terraform module to retrieve and cache files. This module retrieves files from
 a list of URIs and caches them on the local system. If a file already exists in
 the cache, it is not retrieved again. To force retrieval, use `refresh = true`.
 
+The module uses an external data resource  because the Terraform HTTP provider
+can only retrieve `text/*` or `application/json` content types. It does not
+support arbitrary files.
+
 ## Usage
 
 ```
@@ -39,12 +43,25 @@ requires the packages in the [`requirements.txt`](requirements.txt) file.
 Install them using `pip`:
 
 ```
-pip install -r requirements.txt
+sudo pip install -r requirements.txt
 ```
 
-The external data resource is used because the Terraform HTTP provider can only
-retrieve `text/*` or `application/json` content types. It does not support
-arbitrary files.
+If you do not have admin/root privileges to install packages, you can either
+install packages into the user space (and make sure pip's user environment is
+in your PATH):
+
+```
+pip install --user -r requirements.txt
+```
+
+Or you can use pipenv with the `python_cmd` variable to install packages into
+a virtualenv:
+
+```
+pip install --user pipenv  # or on macos `brew install pipenv`
+pipenv install -r requirements.txt
+terraform apply -var python_cmd='["pipenv","run","python"]' ...
+```
 
 ## Limitations
 
