@@ -1,5 +1,6 @@
 [![License](https://img.shields.io/github/license/plus3it/terraform-external-file-cache.svg)](LICENSE)
 [![Travis CI Build Status](https://travis-ci.org/plus3it/terraform-external-file-cache.svg?branch=master)](https://travis-ci.org/plus3it/terraform-external-file-cache)
+[![pullreminders](https://pullreminders.com/badge.svg)](https://pullreminders.com?ref=badge)
 
 # terraform-external-file-cache
 Terraform module to retrieve and cache files. This module retrieves files from
