@@ -30,10 +30,7 @@ data "aws_ami" "example" {
     values = ["amzn-ami-hvm-2017.09.*-x86_64-gp2"]
   }
 
-  filter {
-    name   = "owner-alias"
-    values = ["amazon"]
-  }
+  owner = ["amazon"]
 
   name_regex = "amzn-ami-hvm-2017\\.09\\.\\d\\.[\\d]{8}-x86_64-gp2"
 }
