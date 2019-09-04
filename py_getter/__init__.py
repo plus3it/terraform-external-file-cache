@@ -40,7 +40,7 @@ def qualify_uri(uri):
 
 def qualify_path(path):
     """Qualify the destination path."""
-    return os.path.abspath(os.path.expanduser(path))
+    return os.path.relpath(os.path.expanduser(path))
 
 
 def qualify_filename(filename):
