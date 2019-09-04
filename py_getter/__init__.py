@@ -7,24 +7,35 @@ import argparse
 import io
 import os
 import shutil
+import ssl
 import sys
 
-from six.moves.urllib import parse, request
+import backoff
+import botocore
+from six.moves import urllib
 
 from py_getter import request_handlers
 
+URLOPEN_RETRY_EXCEPTIONS = (
+    urllib.error.URLError,
+)
 
-request.install_opener(request.build_opener(request_handlers.S3Handler))
+GETTER_RETRY_EXCEPTIONS = (
+    botocore.exceptions.ReadTimeoutError,
+)
+
+urllib.request.install_opener(
+    urllib.request.build_opener(request_handlers.S3Handler))
 
 
 def basename_from_uri(uri):
     """Return the basename/filename/leaf part of a URI."""
-    return os.path.basename(parse.urlparse(uri).path)
+    return os.path.basename(urllib.parse.urlparse(uri).path)
 
 
 def qualify_uri(uri):
     """Return a URI compatible with urllib, handling relative file:// URIs."""
-    parts = parse.urlparse(uri)
+    parts = urllib.parse.urlparse(uri)
     scheme = parts.scheme
 
     if scheme != 'file':
@@ -32,10 +43,10 @@ def qualify_uri(uri):
         return uri
 
     # Expand relative file paths and convert them to uri-style
-    path = request.pathname2url(os.path.abspath(os.path.expanduser(
+    path = urllib.request.pathname2url(os.path.abspath(os.path.expanduser(
         ''.join([x for x in [parts.netloc, parts.path] if x]))))
 
-    return parse.urlunparse((scheme, '', path, '', '', ''))
+    return urllib.parse.urlunparse((scheme, '', path, '', '', ''))
 
 
 def qualify_path(path):
@@ -45,7 +56,7 @@ def qualify_path(path):
 
 def qualify_filename(filename):
     """Qualify the destination filename."""
-    return parse.unquote(filename)
+    return urllib.parse.unquote(filename)
 
 
 def create_path(path):
@@ -62,11 +73,28 @@ def to_bool(data):
     return str(data).lower() == "true"
 
 
-def getter(uri, dest):
+@backoff.on_exception(backoff.expo, URLOPEN_RETRY_EXCEPTIONS, max_tries=5)
+def urlopen_retry(uri):
+    """Retry urlopen on exception."""
+    kwargs = {}
+    try:
+        # trust the system's default CA certificates
+        # proper way for 2.7.9+ on Linux
+        if uri.startswith("https://"):
+            kwargs['context'] = ssl.create_default_context(
+                ssl.Purpose.CLIENT_AUTH
+            )
+    except AttributeError:
+        pass
+
+    return urllib.request.urlopen(uri, **kwargs)
+
+
+@backoff.on_exception(backoff.expo, GETTER_RETRY_EXCEPTIONS, max_tries=5)
+def getter(request, dest):
     """Retrieve a file and saves it to the local filesystem."""
-    response = request.urlopen(uri)
     with io.open(dest, mode="wb") as handle:
-        shutil.copyfileobj(response, handle)
+        shutil.copyfileobj(request, handle)
 
 
 def main(uri, path, refresh=False):
@@ -77,7 +105,7 @@ def main(uri, path, refresh=False):
     )
     create_path(qualified_path)
     if not os.path.isfile(qualified_dest) or to_bool(refresh):
-        getter(qualify_uri(uri), qualified_dest)
+        getter(urlopen_retry(qualify_uri(uri)), qualified_dest)
     return {"filepath": qualified_dest}
 
 
