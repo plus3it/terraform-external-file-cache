@@ -49,7 +49,7 @@ resource "aws_security_group" "example" {
   name_prefix = "terraform-external-file-cache-"
   vpc_id      = "${data.aws_vpc.example.id}"
 
-  tags {
+  tags = {
     Name = "terraform-external-file-cache-example"
   }
 
@@ -75,7 +75,7 @@ resource "aws_instance" "example" {
   key_name               = "${aws_key_pair.example.id}"
   vpc_security_group_ids = ["${aws_security_group.example.id}"]
 
-  tags {
+  tags = {
     Name = "terraform-external-file-cache-example"
   }
 }
