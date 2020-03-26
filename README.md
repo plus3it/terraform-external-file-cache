@@ -7,7 +7,7 @@ Terraform module to retrieve and cache files. This module retrieves files from
 a list of URIs and caches them on the local system. If a file already exists in
 the cache, it is not retrieved again. To force retrieval, use `refresh = true`.
 
-The module uses an external data resource  because the Terraform HTTP provider
+The module uses an external data resource because the Terraform HTTP provider
 can only retrieve `text/*` or `application/json` content types. It does not
 support arbitrary files.
 
