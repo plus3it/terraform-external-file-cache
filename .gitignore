@@ -6,6 +6,19 @@
 # Module-specific exclusions
 .filecache
 
+# ignore go files
+vendor/
+
+# ignore log files
+*.log
+
+# tardigrade-ci
+.tardigrade-ci
+tardigrade-ci/
+
+# eclint
+.git/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -7,7 +7,7 @@ Terraform module to retrieve and cache files. This module retrieves files from
 a list of URIs and caches them on the local system. If a file already exists in
 the cache, it is not retrieved again. To force retrieval, use `refresh = true`.
 
-The module uses an external data resource  because the Terraform HTTP provider
+The module uses an external data resource because the Terraform HTTP provider
 can only retrieve `text/*` or `application/json` content types. It does not
 support arbitrary files.
 
@@ -87,6 +87,30 @@ docs for details on built-in handlers.
 The module also includes a custom handler for S3 URIs, `s3://`.
 
 [urllib]: https://docs.python.org/3/library/urllib.request.html
+
+<!-- BEGIN TFDOCS -->
+## Providers
+
+| Name | Version |
+|------|---------|
+| external | n/a |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:-----:|
+| cache\_dir | Path where files will be cached | `string` | `".filecache"` | no |
+| python\_cmd | Command to use when executing the python external resource | `list(string)` | <pre>[<br>  "python"<br>]</pre> | no |
+| refresh | Retrieve file even if the URI is already cached on the system | `string` | `"false"` | no |
+| uris | List of URIs to the files to be retrieved and cached locally | `list(string)` | `[]` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| filepaths | Map of uri => cached filepaths |
+
+<!-- END TFDOCS -->
 
 ## Authors
 
