@@ -88,6 +88,30 @@ The module also includes a custom handler for S3 URIs, `s3://`.
 
 [urllib]: https://docs.python.org/3/library/urllib.request.html
 
+<!-- BEGIN TFDOCS -->
+## Providers
+
+| Name | Version |
+|------|---------|
+| external | n/a |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:-----:|
+| cache\_dir | Path where files will be cached | `string` | `".filecache"` | no |
+| python\_cmd | Command to use when executing the python external resource | `list(string)` | <pre>[<br>  "python"<br>]</pre> | no |
+| refresh | Retrieve file even if the URI is already cached on the system | `string` | `"false"` | no |
+| uris | List of URIs to the files to be retrieved and cached locally | `list(string)` | `[]` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| filepaths | Map of uri => cached filepaths |
+
+<!-- END TFDOCS -->
+
 ## Authors
 
 This module is managed by [Plus3 IT Systems](https://github.com/plus3it).
