@@ -22,6 +22,10 @@ class BufferedIOS3Key(io.BufferedIOBase):
 class S3Handler(urllib.request.BaseHandler):
     """Define urllib handler for S3 objects."""
 
+    def __init__(self):
+        super(S3Handler, self).__init__()
+        self.s3_conn = boto3.resource("s3")
+
     def s3_open(self, req):
         """Open S3 objects."""
         # Credit: <https://github.com/ActiveState/code/tree/master/recipes/Python/578957_Urllib_handler_AmazS3>  # noqa: E501, pylint: disable=line-too-long
@@ -44,14 +48,7 @@ class S3Handler(urllib.request.BaseHandler):
                 'url must be in the format s3://<bucket>/<key>'
             )
 
-        try:
-            s3_conn = self.s3_conn
-        except AttributeError:
-            # pylint: disable=attribute-defined-outside-init
-            s3_conn = self.s3_conn = boto3.resource("s3")
-
-        key = s3_conn.Object(bucket_name=bucket_name, key=key_name)
-
+        key = self.s3_conn.Object(bucket_name=bucket_name, key=key_name)
         origurl = 's3://{0}/{1}'.format(bucket_name, key_name)
 
         if key is None:
