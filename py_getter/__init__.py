@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 """Downloads files using urllib.request.urlopen, with additional handlers."""
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals, with_statement)
+from __future__ import (
+    absolute_import,
+    division,
+    print_function,
+    unicode_literals,
+    with_statement,
+)
 
 import argparse
 import io
@@ -16,16 +21,11 @@ from six.moves import urllib
 
 from py_getter import request_handlers
 
-URLOPEN_RETRY_EXCEPTIONS = (
-    urllib.error.URLError,
-)
+URLOPEN_RETRY_EXCEPTIONS = (urllib.error.URLError,)
 
-GETTER_RETRY_EXCEPTIONS = (
-    botocore.exceptions.ReadTimeoutError,
-)
+GETTER_RETRY_EXCEPTIONS = (botocore.exceptions.ReadTimeoutError,)
 
-urllib.request.install_opener(
-    urllib.request.build_opener(request_handlers.S3Handler))
+urllib.request.install_opener(urllib.request.build_opener(request_handlers.S3Handler))
 
 
 def basename_from_uri(uri):
@@ -38,15 +38,18 @@ def qualify_uri(uri):
     parts = urllib.parse.urlparse(uri)
     scheme = parts.scheme
 
-    if scheme != 'file':
+    if scheme != "file":
         # Return non-file paths unchanged
         return uri
 
     # Expand relative file paths and convert them to uri-style
-    path = urllib.request.pathname2url(os.path.abspath(os.path.expanduser(
-        ''.join([x for x in [parts.netloc, parts.path] if x]))))
+    path = urllib.request.pathname2url(
+        os.path.abspath(
+            os.path.expanduser("".join([x for x in [parts.netloc, parts.path] if x]))
+        )
+    )
 
-    return urllib.parse.urlunparse((scheme, '', path, '', '', ''))
+    return urllib.parse.urlunparse((scheme, "", path, "", "", ""))
 
 
 def qualify_path(path):
@@ -81,9 +84,7 @@ def urlopen_retry(uri):
         # trust the system's default CA certificates
         # proper way for 2.7.9+ on Linux
         if uri.startswith("https://"):
-            kwargs['context'] = ssl.create_default_context(
-                ssl.Purpose.CLIENT_AUTH
-            )
+            kwargs["context"] = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
     except AttributeError:
         pass
 
