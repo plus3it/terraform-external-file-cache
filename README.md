@@ -89,6 +89,10 @@ The module also includes a custom handler for S3 URIs, `s3://`.
 [urllib]: https://docs.python.org/3/library/urllib.request.html
 
 <!-- BEGIN TFDOCS -->
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -98,7 +102,7 @@ The module also includes a custom handler for S3 URIs, `s3://`.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | cache\_dir | Path where files will be cached | `string` | `".filecache"` | no |
 | python\_cmd | Command to use when executing the python external resource | `list(string)` | <pre>[<br>  "python"<br>]</pre> | no |
 | refresh | Retrieve file even if the URI is already cached on the system | `string` | `"false"` | no |
