@@ -23,7 +23,10 @@ from py_getter import request_handlers
 
 URLOPEN_RETRY_EXCEPTIONS = (urllib.error.URLError,)
 
-GETTER_RETRY_EXCEPTIONS = (botocore.exceptions.ReadTimeoutError,)
+GETTER_RETRY_EXCEPTIONS = (
+    botocore.exceptions.ReadTimeoutError,
+    botocore.exceptions.MetadataRetrievalError,
+)
 
 urllib.request.install_opener(urllib.request.build_opener(request_handlers.S3Handler))
 
