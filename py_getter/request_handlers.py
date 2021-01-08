@@ -20,6 +20,8 @@ class BufferedIOS3Key(io.BufferedIOBase):
     """Add a read method to S3 key object."""
 
     def __init__(self, key, *args, **kwargs):
+        """Read key."""
+        # pylint: disable=super-with-arguments
         super(BufferedIOS3Key, self).__init__(*args, **kwargs)
         self.read = key.get()["Body"].read
 
@@ -28,7 +30,8 @@ class S3Handler(urllib.request.BaseHandler):
     """Define urllib handler for S3 objects."""
 
     def __init__(self):
-        super(S3Handler, self).__init__()
+        """Initiate S3 resource connection."""
+        super(S3Handler, self).__init__()  # pylint: disable=super-with-arguments
         self.s3_conn = boto3.resource("s3")
 
     def s3_open(self, req):

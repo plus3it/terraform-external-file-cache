@@ -1,5 +1,4 @@
 argparse;python_version<"2.7"
 backoff
 boto3
-botocore
 six

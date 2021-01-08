@@ -1,5 +1,6 @@
-FROM plus3it/tardigrade-ci:0.1.0
-
+FROM plus3it/tardigrade-ci:0.6.2
+COPY requirements.txt /app/requirements.txt
+RUN python -m pip install -r /app/requirements.txt
 WORKDIR /ci-harness
 ENTRYPOINT ["make"]
 
