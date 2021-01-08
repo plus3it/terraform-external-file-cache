@@ -11,7 +11,7 @@ from __future__ import (
 import json
 
 
-class TfExternal(object):
+class TfExternal(object):  # pylint: disable=useless-object-inheritance
     """Wrap Terraform External provider."""
 
     @staticmethod

@@ -2,6 +2,7 @@
 *.tfstate
 *.tfstate.backup
 .terraform/
+.terraform.lock.hcl
 
 # Module-specific exclusions
 .filecache
@@ -120,3 +121,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# go
+go.mod
+go.sum
