@@ -97,22 +97,28 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| external | n/a |
+| <a name="provider_external"></a> [external](#provider\_external) | n/a |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [external_external.this](https://registry.terraform.io/providers/hashicorp/external/latest/docs/data-sources/external) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| cache\_dir | Path where files will be cached | `string` | `".filecache"` | no |
-| python\_cmd | Command to use when executing the python external resource | `list(string)` | <pre>[<br>  "python"<br>]</pre> | no |
-| refresh | Retrieve file even if the URI is already cached on the system | `string` | `"false"` | no |
-| uris | List of URIs to the files to be retrieved and cached locally | `list(string)` | `[]` | no |
+| <a name="input_cache_dir"></a> [cache\_dir](#input\_cache\_dir) | Path where files will be cached | `string` | `".filecache"` | no |
+| <a name="input_python_cmd"></a> [python\_cmd](#input\_python\_cmd) | Command to use when executing the python external resource | `list(string)` | <pre>[<br>  "python"<br>]</pre> | no |
+| <a name="input_refresh"></a> [refresh](#input\_refresh) | Retrieve file even if the URI is already cached on the system | `string` | `"false"` | no |
+| <a name="input_uris"></a> [uris](#input\_uris) | List of URIs to the files to be retrieved and cached locally | `list(string)` | `[]` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| filepaths | Map of uri => cached filepaths |
+| <a name="output_filepaths"></a> [filepaths](#output\_filepaths) | Map of uri => cached filepaths |
 
 <!-- END TFDOCS -->
 
