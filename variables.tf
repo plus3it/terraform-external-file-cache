@@ -5,7 +5,7 @@ variable "cache_dir" {
 }
 
 variable "uris" {
-  type        = tolist(string)
+  type        = list(string)
   description = "List of URIs to the files to be retrieved and cached locally"
   default     = []
 }
@@ -17,7 +17,7 @@ variable "refresh" {
 }
 
 variable "python_cmd" {
-  type        = tolist(string)
+  type        = list(string)
   description = "Command to use when executing the python external resource"
   default     = ["python"]
 }
