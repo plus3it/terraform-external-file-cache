@@ -9,11 +9,15 @@ from __future__ import (
 )
 
 import io
+import os
 from email import message_from_string
 
 import boto3
+import localstack_client.session
 
 from six.moves import urllib
+
+AWS_DEFAULT_REGION = os.getenv("AWS_DEFAULT_REGION", default="us-east-1")
 
 
 class BufferedIOS3Key(io.BufferedIOBase):
@@ -31,8 +35,23 @@ class S3Handler(urllib.request.BaseHandler):
 
     def __init__(self):
         """Initiate S3 resource connection."""
-        super(S3Handler, self).__init__()  # pylint: disable=super-with-arguments
-        self.s3_conn = boto3.resource("s3")
+        super().__init__()
+        self.s3_conn = None
+
+    def connect(self, s3_endpoint_url=None):
+        """Use AWS or a mock stack for API calls."""
+        if s3_endpoint_url and (
+            "localhost" in s3_endpoint_url or "localstack" in s3_endpoint_url
+        ):
+            localstack_session = localstack_client.session.Session(
+                localstack_host=s3_endpoint_url
+            )
+            self.s3_conn = localstack_session.resource(
+                "s3", region_name=AWS_DEFAULT_REGION
+            )
+        else:
+            session = boto3.Session()
+            self.s3_conn = session.resource("s3", endpoint_url=s3_endpoint_url)
 
     def s3_open(self, req):
         """Open S3 objects."""

@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
 """Downloads files using urllib.request.urlopen, with additional handlers."""
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-    with_statement,
-)
-
 import argparse
 import io
 import os
@@ -28,7 +20,9 @@ GETTER_RETRY_EXCEPTIONS = (
     botocore.exceptions.MetadataRetrievalError,
 )
 
-urllib.request.install_opener(urllib.request.build_opener(request_handlers.S3Handler))
+
+HANDLER = request_handlers.S3Handler()
+urllib.request.install_opener(urllib.request.build_opener(HANDLER))
 
 
 def basename_from_uri(uri):
@@ -102,8 +96,10 @@ def getter(request, dest):
         shutil.copyfileobj(request, handle)
 
 
-def main(uri, path, refresh=False):
+def main(uri, path, refresh=False, s3_endpoint_url=None):
     """Coordinate the retrieval of a file from a URI."""
+    HANDLER.connect(s3_endpoint_url=s3_endpoint_url)
+
     qualified_path = qualify_path(path)
     qualified_dest = os.path.join(
         qualified_path, qualify_filename(basename_from_uri(uri))
@@ -120,7 +116,8 @@ def cli():
     parser.add_argument("URI")
     parser.add_argument("PATH")
     parser.add_argument("--refresh", action="store_true")
+    parser.add_argument("--s3_endpoint_url")
 
     args = parser.parse_args()
 
-    sys.exit(main(args.URI, args.PATH, args.refresh))
+    sys.exit(main(args.URI, args.PATH, args.refresh, args.s3_endpoint_url))
