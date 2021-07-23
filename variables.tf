@@ -21,3 +21,9 @@ variable "python_cmd" {
   description = "Command to use when executing the python external resource"
   default     = ["python"]
 }
+
+variable "s3_endpoint_url" {
+  type        = string
+  description = "S3 API endpoint for non-AWS hosts; format: https://hostname:port"
+  default     = null
+}

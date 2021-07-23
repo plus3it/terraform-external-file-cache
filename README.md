@@ -113,6 +113,7 @@ No requirements.
 | <a name="input_python_cmd"></a> [python\_cmd](#input\_python\_cmd) | Command to use when executing the python external resource | `list(string)` | <pre>[<br>  "python"<br>]</pre> | no |
 | <a name="input_refresh"></a> [refresh](#input\_refresh) | Retrieve file even if the URI is already cached on the system | `string` | `"false"` | no |
 | <a name="input_uris"></a> [uris](#input\_uris) | List of URIs to the files to be retrieved and cached locally | `list(string)` | `[]` | no |
+| <a name="input_s3_endpoint_url"></a> [s3_endpoint_url](#input\_s3_endpoint_url) | S3 API endpoint for non-AWS hosts; format: https://hostname:port | `string` | `null` | no |
 
 ## Outputs
 
