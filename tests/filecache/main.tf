@@ -14,12 +14,14 @@ module "file_cache" {
 
   uris    = local.uris
   refresh = true
+
+  s3_endpoint_url = "http://${var.mockstack_host}:${var.mockstack_port}"
 }
 
 locals {
   uris = [
     "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm",
-    "https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm",
+    "https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm",
     "s3://${data.terraform_remote_state.prereq.outputs.bucket.id}/${data.terraform_remote_state.prereq.outputs.bucket_object.id}"
   ]
 }

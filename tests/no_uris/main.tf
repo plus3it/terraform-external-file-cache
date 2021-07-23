@@ -1,5 +1,7 @@
 module "file_cache" {
   source = "../../"
+
+  s3_endpoint_url = "http://${var.mockstack_host}:${var.mockstack_port}"
 }
 
 output "filepaths" {
