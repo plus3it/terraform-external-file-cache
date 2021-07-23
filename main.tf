@@ -1,7 +1,7 @@
 data "external" "this" {
   for_each = toset(var.uris)
 
-  program = concat(var.python_cmd, tolist(["${path.module}/file_cache.py"]))
+  program = concat(var.python_cmd, ["${path.module}/file_cache.py"])
 
   query = {
     uri     = each.key
