@@ -4,8 +4,9 @@ data "external" "this" {
   program = concat(var.python_cmd, ["${path.module}/file_cache.py"])
 
   query = {
-    uri     = each.key
-    path    = "${var.cache_dir}/${sha256(each.key)}"
-    refresh = var.refresh
+    uri             = each.key
+    path            = "${var.cache_dir}/${sha256(each.key)}"
+    refresh         = var.refresh
+    s3_endpoint_url = var.s3_endpoint_url
   }
 }
