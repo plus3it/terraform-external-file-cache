@@ -1,4 +1,3 @@
 backoff
 boto3
-localstack-client
 six
