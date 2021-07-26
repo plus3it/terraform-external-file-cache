@@ -1,8 +1,3 @@
-terraform {
-  required_version = ">= 0.12"
-}
-
-
 module "file_cache" {
   source = "../../"
 }

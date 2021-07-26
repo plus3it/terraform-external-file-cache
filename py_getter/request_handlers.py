@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
 """Extends urllib with additional handlers."""
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-    with_statement,
-)
-
 import io
 from email import message_from_string
 
@@ -31,8 +23,13 @@ class S3Handler(urllib.request.BaseHandler):
 
     def __init__(self):
         """Initiate S3 resource connection."""
-        super(S3Handler, self).__init__()  # pylint: disable=super-with-arguments
-        self.s3_conn = boto3.resource("s3")
+        super().__init__()
+        self.s3_conn = None
+
+    def connect(self, s3_endpoint_url=None):
+        """Use AWS or a mock stack for API calls."""
+        session = boto3.Session()
+        self.s3_conn = session.resource("s3", endpoint_url=s3_endpoint_url)
 
     def s3_open(self, req):
         """Open S3 objects."""

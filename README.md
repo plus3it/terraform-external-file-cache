@@ -112,6 +112,7 @@ No requirements.
 | <a name="input_cache_dir"></a> [cache\_dir](#input\_cache\_dir) | Path where files will be cached | `string` | `".filecache"` | no |
 | <a name="input_python_cmd"></a> [python\_cmd](#input\_python\_cmd) | Command to use when executing the python external resource | `list(string)` | <pre>[<br>  "python"<br>]</pre> | no |
 | <a name="input_refresh"></a> [refresh](#input\_refresh) | Retrieve file even if the URI is already cached on the system | `string` | `"false"` | no |
+| <a name="input_s3_endpoint_url"></a> [s3\_endpoint\_url](#input\_s3\_endpoint\_url) | S3 API endpoint for non-AWS hosts; format: https://hostname:port | `string` | `null` | no |
 | <a name="input_uris"></a> [uris](#input\_uris) | List of URIs to the files to be retrieved and cached locally | `list(string)` | `[]` | no |
 
 ## Outputs

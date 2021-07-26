@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
 """Wraps py_getter with a terraform external interface."""
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-    with_statement,
-)
-
 import sys
 
 import py_getter
