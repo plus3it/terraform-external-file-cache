@@ -15,7 +15,7 @@ module "file_cache" {
   uris    = local.uris
   refresh = true
 
-  s3_endpoint_url = "http://${var.mockstack_host}:${var.mockstack_port}"
+  s3_endpoint_url = var.s3_endpoint_url
 }
 
 locals {
@@ -29,4 +29,10 @@ locals {
 output "filepaths" {
   description = "List of cached filepaths retrieved from URIs"
   value       = module.file_cache.filepaths
+}
+
+variable "s3_endpoint_url" {
+  type        = string
+  description = "S3 API endpoint for non-AWS hosts; format: https://hostname:port"
+  default     = null
 }
