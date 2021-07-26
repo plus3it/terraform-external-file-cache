@@ -116,7 +116,7 @@ def cli():
     parser.add_argument("URI")
     parser.add_argument("PATH")
     parser.add_argument("--refresh", action="store_true")
-    parser.add_argument("--s3_endpoint_url")
+    parser.add_argument("--s3-endpoint-url")
 
     args = parser.parse_args()
 
