@@ -52,10 +52,10 @@ class S3Handler(urllib.request.BaseHandler):
             raise urllib.error.URLError("url must be in the format s3://<bucket>/<key>")
 
         key = self.s3_conn.Object(bucket_name=bucket_name, key=key_name)
-        origurl = "s3://{0}/{1}".format(bucket_name, key_name)
+        origurl = f"s3://{bucket_name}/{key_name}"
 
         if key is None:
-            raise urllib.error.URLError("no such resource: {0}".format(origurl))
+            raise urllib.error.URLError(f"no such resource: {origurl}")
 
         headers = [
             ("Content-type", key.content_type),
@@ -68,9 +68,7 @@ class S3Handler(urllib.request.BaseHandler):
 
         headers = message_from_string(
             "\n".join(
-                "{0}: {1}".format(header, value)
-                for header, value in headers
-                if value is not None
+                f"{header}: {value}" for header, value in headers if value is not None
             )
         )
 
