@@ -98,7 +98,7 @@ def getter(request, dest):
 
 def main(uri, path, refresh=False, s3_endpoint_url=None):
     """Coordinate the retrieval of a file from a URI."""
-    s3_endpoint_url = s3_endpoint_url if s3_endpoint_url else None
+    s3_endpoint_url = s3_endpoint_url or None
 
     HANDLER.connect(s3_endpoint_url=s3_endpoint_url)
 
