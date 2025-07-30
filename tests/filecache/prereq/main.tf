@@ -2,7 +2,7 @@ resource "aws_s3_bucket" "this" {
   bucket_prefix = "terraform-external-file-cache-"
 }
 
-resource "aws_s3_bucket_object" "this" {
+resource "aws_s3_object" "this" {
   bucket  = aws_s3_bucket.this.id
   key     = "test.txt"
   content = "TESTING"
@@ -13,5 +13,5 @@ output "bucket" {
 }
 
 output "bucket_object" {
-  value = aws_s3_bucket_object.this
+  value = aws_s3_object.this
 }
