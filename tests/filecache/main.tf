@@ -22,7 +22,7 @@ locals {
   uris = [
     "https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm",
     "https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm",
-    "s3://${data.terraform_remote_state.prereq.outputs.bucket.id}/${data.terraform_remote_state.prereq.outputs.bucket_object.id}"
+    "s3://${data.terraform_remote_state.prereq.outputs.bucket_object.id}"
   ]
 }
 
