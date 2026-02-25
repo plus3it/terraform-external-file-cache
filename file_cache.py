@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Wraps py_getter with a terraform external interface."""
+
 import sys
 
 import py_getter

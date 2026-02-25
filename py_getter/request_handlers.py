@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Extends urllib with additional handlers."""
+
 import io
 from email import message_from_string
 
