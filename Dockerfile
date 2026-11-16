@@ -1,4 +1,4 @@
-FROM plus3it/tardigrade-ci:0.32.1
+FROM plus3it/tardigrade-ci:0.33.2
 
 COPY requirements.txt /app/requirements.txt
 
